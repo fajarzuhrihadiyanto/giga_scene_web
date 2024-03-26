@@ -1,0 +1,29 @@
+.html {
+    width: 600px;
+    height: 800px;
+    transition: opacity .3s;
+    opacity: 0
+}
+
+.container {
+    padding: 32px
+}
+
+.title {
+    margin-bottom: 0;
+}
+
+.description {
+    text-align: justify;
+    line-height: 2;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px
+}
+
+.list_item {
+    text-align: justify;
+}

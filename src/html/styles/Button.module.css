@@ -1,0 +1,30 @@
+.button_container {
+    display: flex;
+    gap: 16px;
+    position: absolute;
+    bottom: 32px;
+    right: 32px
+}
+
+.button_container_left {
+    display: flex;
+    gap: 16px;
+    position: absolute;
+    bottom: 32px;
+    left: 32px
+
+}
+
+.black_button, .link_button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+.link_button {
+    text-decoration: none;
+}
