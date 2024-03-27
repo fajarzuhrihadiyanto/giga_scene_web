@@ -5,6 +5,7 @@ import { Bloom, Selection, EffectComposer, Outline } from '@react-three/postproc
 import BackButton from './components/BackButton'
 import ControlContainer from './context/ControlsContext'
 import Lab from './models/Lab'
+import Loader from './models/Loader'
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
     <div className="App" style={{width: '100vw', height: '100vh'}}>
       {/* IMPORTANT : DO NOT SET FRAMELOOP TO DEMAND, SOMETIME IT WILL STOP THE ANIMATION RENDERING */}
       <Canvas camera={{position: cameraPosition}} shadows>
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loader />}>
           <ambientLight intensity={5} />
 
           <ControlContainer target={controlsTarget}>
