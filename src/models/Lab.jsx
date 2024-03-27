@@ -47,8 +47,10 @@ export default function Lab(props) {
   React.useEffect(() => {
     if (controls.current) {
       if (focusTarget !== null) {
-        // disable rotate when focused to an area, except omnidirectional threadmill
-        if (focusTarget !== FOCUS_OMNIDIRECTIONAL_THREADMILL) {
+        // adjust camera rotation between orbital for omnidirectional threadmill and disabled for others
+        if (focusTarget === FOCUS_OMNIDIRECTIONAL_THREADMILL) {
+          controls.current.rotateSpeed = 1
+        } else {
           controls.current.enableRotate = false
         }
 
@@ -57,8 +59,11 @@ export default function Lab(props) {
         gsap.to(camera.position, {duration: 1, ease: 'power4.inOut', x: cameraPosition[0], y: cameraPosition[1], z: cameraPosition[2]})
         
       } else {
-        // animate back camera to original position and enable rotate
+        // enable rotate and set rotate speed back to default
         controls.current.enableRotate = true
+        controls.current.rotateSpeed = -.5
+
+        // animate back camera to original position 
         gsap.to(camera.position, {duration: 1, x: 0, y: 2, z: .01})
         gsap.to(controls.current.target, {duration: 1, x: 0, y: 2, z: 0})
       }
