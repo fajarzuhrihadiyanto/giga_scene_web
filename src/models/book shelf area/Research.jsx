@@ -41,9 +41,9 @@ const Research = ({nodes, materials, ...props}) => {
 
     // research area click function
     const onClick = React.useCallback(() => {
-        let cameraPosition = [-.95, 1.12, -3.25], controlsTargetOffset = [0,0,-.01]
+        let cameraPosition = [-.95, 1.22, -3.25], controlsTargetOffset = [0,0,-.01]
         if (isMobile) {
-            cameraPosition = [-1, 1.12, -1.5]
+            cameraPosition = [-1, 1.22, -1.5]
             controlsTargetOffset = [0,0,-.01]
         }
 
