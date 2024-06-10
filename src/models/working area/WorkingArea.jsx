@@ -12,6 +12,7 @@ import Mouse from "./Mouse";
 import Tooltip from "../../components/Tootlip";
 import useMainStore from "../../store/useMainStore";
 import { FOCUS_FACILITIES } from "../../constants";
+import { useResponsiveScreen } from "../../utils";
 
 const WorkingArea = ({nodes, materials, ...props}) => {
 
@@ -20,6 +21,7 @@ const WorkingArea = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
     const [isHovered, setIsHovered] = React.useState(false)
@@ -42,11 +44,18 @@ const WorkingArea = ({nodes, materials, ...props}) => {
 
     // lounge area click function
     const onClick = React.useCallback(() => {
+
+        let cameraPosition = [-2.7, 1.3, -2.5], controlsTargetOffset = [-0.1,-0.05,0]
+        if (isMobile) {
+            cameraPosition = [-2.65, 1.3, -2.55]
+            controlsTargetOffset = [-0.1,-0.05,0]
+        }
+        
         if (focusTarget === null) {
             setIsHovered(false)
             setFocusTarget(FOCUS_FACILITIES)
-            setCameraPosition([-2.7, 1.3, -2.5])
-            setControlsTargetOffset([-0.1,-0.05,0])
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
         }
     }, [focusTarget])
 

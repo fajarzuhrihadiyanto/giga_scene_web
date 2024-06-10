@@ -4,7 +4,7 @@ import { Select } from "@react-three/postprocessing";
 
 import Picture from "./Picture";
 import useMainStore from "../../store/useMainStore";
-import { addVector3 } from "../../utils";
+import { addVector3, useResponsiveScreen } from "../../utils";
 import { FOCUS_LECTURER } from "../../constants";
 import { LECTURERS } from "../../data/lecturers";
 import Tooltip from "../../components/Tootlip";
@@ -16,6 +16,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     const [hoveredPictureId, setHoveredPictureId] = React.useState(-1)
     const [clickedPictureId, setClickedPictureId] = React.useState(-1)
@@ -25,7 +26,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
         setFocusTarget(null)
         setClickedPictureId(-1)
         setCameraPosition([0,2,0])
-        setControlsTargetOffset([0,2,-.01])
+        setControlsTargetOffset([-.01,0,0])
     }, [])
 
     // picture hover function
@@ -69,13 +70,18 @@ const PictureArea = ({nodes, materials, ...props}) => {
                     // dont set clicked picture if the focus target is already at the picture
                     if (focusTarget === FOCUS_LECTURER) return
 
+                    let cameraPositionOffset = [0.5, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
+                    if (isMobile) {
+                        cameraPositionOffset = [1.1, -.4, 0]
+                    }
+
                     // reset hovered picture id
                     setHoveredPictureId(-1)
 
                     setFocusTarget(FOCUS_LECTURER)
                     setClickedPictureId(index)
-                    setCameraPosition(addVector3(position, [0.5, 0, -0.5]))
-                    setControlsTargetOffset([-.01, 0, 0])
+                    setCameraPosition(addVector3(position, cameraPositionOffset))
+                    setControlsTargetOffset(controlsTargetOffset)
                 }
 
                 // get next picture position respectively
@@ -94,16 +100,24 @@ const PictureArea = ({nodes, materials, ...props}) => {
             
                 // go to next picture
                 const nextPic = () => {
+                    let cameraPositionOffset = [0.5, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
+                    if (isMobile) {
+                        cameraPositionOffset = [1.1, -.4, 0]
+                    }
                     setClickedPictureId((index + 1) % totalPicture)
-                    setCameraPosition(addVector3(nextPosition, [0.5, 0, -0.5]))
-                    setControlsTargetOffset([-.01, 0, 0])
+                    setCameraPosition(addVector3(nextPosition, cameraPositionOffset))
+                    setControlsTargetOffset(controlsTargetOffset)
                 }
             
                 // go to previous picture
                 const prevPic = () => {
+                    let cameraPositionOffset = [0.5, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
+                    if (isMobile) {
+                        cameraPositionOffset = [1.1, -.4, 0]
+                    }
                     setClickedPictureId((index - 1 + totalPicture) % totalPicture)
-                    setCameraPosition(addVector3(prevPosition, [0.5, 0, -0.5]))
-                    setControlsTargetOffset([-.01, 0, 0])
+                    setCameraPosition(addVector3(prevPosition, cameraPositionOffset))
+                    setControlsTargetOffset(controlsTargetOffset)
                 }
 
                 // set hovered status

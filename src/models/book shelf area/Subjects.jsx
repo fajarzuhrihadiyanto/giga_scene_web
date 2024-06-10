@@ -9,6 +9,7 @@ import useMainStore from "../../store/useMainStore";
 import { FOCUS_BOOK_DETAIL, FOCUS_SUBJECT } from "../../constants";
 import { SUBJECT } from "../../data/subject";
 import { SubjectPagesLeft, SubjectPagesRight } from "../../html/SubjectPages";
+import { useResponsiveScreen } from "../../utils";
 
 const Subjects = ({nodes, materials, ...props}) => {
     
@@ -17,6 +18,7 @@ const Subjects = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
     const [isHovered, setIsHovered] = React.useState(false)
@@ -39,12 +41,18 @@ const Subjects = ({nodes, materials, ...props}) => {
 
     // subject area click function
     const onClick = React.useCallback(() => {
+        let cameraPosition = [-.95, 1.72, -3.25], controlsTargetOffset = [0,0,-.01]
+        if (isMobile) {
+            cameraPosition = [-1, 1.72, -1.5]
+            controlsTargetOffset = [0,0,-.01]
+        }
+
         // only rise click event while on main view
         if (focusTarget === null) {
             setIsHovered(false)
             setFocusTarget(FOCUS_SUBJECT)
-            setCameraPosition([-.95, 1.72, -3.25])
-            setControlsTargetOffset([0,0,-.01])
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
         }
     }, [focusTarget])
 
@@ -78,6 +86,13 @@ const Subjects = ({nodes, materials, ...props}) => {
             e.stopPropagation()
             setFocusTarget(FOCUS_BOOK_DETAIL)
 
+            if (isMobile) {
+                const cameraPosition = [-.97, 1.72, -2.75], controlsTargetOffset = [0,0,-.01]
+                
+                setCameraPosition(cameraPosition)
+                setControlsTargetOffset(controlsTargetOffset)
+            }
+
             // reset hovered book id
             setHoveredBookId(-1)
 
@@ -89,6 +104,13 @@ const Subjects = ({nodes, materials, ...props}) => {
     const back = React.useCallback(() => {
         // set focus back to subject
         setFocusTarget(FOCUS_SUBJECT)
+
+        if (isMobile) {
+            const cameraPosition = [-1, 1.72, -1.5], controlsTargetOffset = [0,0,-.01]
+            
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
+        }
         
         // reset clicked book id
         setClickedBookId(-1)
@@ -124,13 +146,15 @@ const Subjects = ({nodes, materials, ...props}) => {
                                 onClick={(e) => {onBookClick(e, index)}}
                                 shown={shown}
                             >
-                                <>
-                                    <SubjectPagesLeft shown={shown} title={val.title} description={val.description} mandatory={val.mandatory}/>
-                                    <SubjectPagesRight shown={shown} objective={val.objective} backFn={back} />
-                                </>
+                                {shown && (
+                                    <>
+                                        <SubjectPagesLeft title={val.title} description={val.description} mandatory={val.mandatory}/>
+                                        <SubjectPagesRight objective={val.objective} backFn={back} />
+                                    </>
+                                )}
                             </Book>
                         </Select>
-                        <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
+                        {focusTarget === FOCUS_SUBJECT && <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
                             <p
                                 style={{
                                     margin: 0,
@@ -140,7 +164,7 @@ const Subjects = ({nodes, materials, ...props}) => {
                             >
                                 {val.title}
                             </p>
-                        </Tooltip>
+                        </Tooltip>}
                         </>
                     )})}
                 </group>

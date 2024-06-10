@@ -9,6 +9,7 @@ import { FOCUS_BOOK_DETAIL, FOCUS_COMMUNITY_SERVICE } from "../../constants";
 import useMainStore from "../../store/useMainStore";
 import { COMMUNITY_SERVICE } from "../../data/communityService";
 import { CommunityServicePagesLeft } from "../../html/CommunityServicePages";
+import { useResponsiveScreen } from "../../utils";
 
 export default function CommunityServices({nodes, materials, ...props}) {
 
@@ -17,6 +18,7 @@ export default function CommunityServices({nodes, materials, ...props}) {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
     const [isHovered, setIsHovered] = React.useState(false)
@@ -39,12 +41,18 @@ export default function CommunityServices({nodes, materials, ...props}) {
 
     // community service area click function
     const onClick = React.useCallback(() => {
+        let cameraPosition = [-.95, 0.72, -3.25], controlsTargetOffset = [0,0,-.01]
+        if (isMobile) {
+            cameraPosition = [-1, 0.72, -1.5]
+            controlsTargetOffset = [0,0,-.01]
+        }
+
         // only rise click event while on main view
         if (focusTarget === null) {
             setIsHovered(false)
             setFocusTarget(FOCUS_COMMUNITY_SERVICE)
-            setCameraPosition([-.95, 0.72, -3.25])
-            setControlsTargetOffset([0,0,-.01])
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
         }
     }, [focusTarget])
 
@@ -78,6 +86,13 @@ export default function CommunityServices({nodes, materials, ...props}) {
             e.stopPropagation()
             setFocusTarget(FOCUS_BOOK_DETAIL)
 
+            if (isMobile) {
+                const cameraPosition = [-.97, 0.72, -2.75], controlsTargetOffset = [0,0,-.01]
+                
+                setCameraPosition(cameraPosition)
+                setControlsTargetOffset(controlsTargetOffset)
+            }
+
             // reset hovered book id
             setHoveredBookId(-1)
 
@@ -88,6 +103,14 @@ export default function CommunityServices({nodes, materials, ...props}) {
 
     const back = React.useCallback(() => {
         setFocusTarget(FOCUS_COMMUNITY_SERVICE)
+
+        if (isMobile) {
+            const cameraPosition = [-1, 0.72, -1.5], controlsTargetOffset = [0,0,-.01]
+            
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
+        }
+
         setClickedBookId(-1)
     }, [])
     // =====| SINGLE BOOK AREA |=====
@@ -104,6 +127,7 @@ export default function CommunityServices({nodes, materials, ...props}) {
 
                         // status shown if the book is clicked
                         const shown = clickedBookId === index
+                        // console.log('book', shown)
 
                         return (
                             <>
@@ -119,11 +143,11 @@ export default function CommunityServices({nodes, materials, ...props}) {
                                         shown={shown}
                                     >
                                         <>
-                                            <CommunityServicePagesLeft shown={shown} type={val.type} title={val.title} researcher={val.researcher} year={val.year} backFn={back}/>
+                                            {shown && <CommunityServicePagesLeft type={val.type} title={val.title} researcher={val.researcher} year={val.year} backFn={back}/>}
                                         </>
                                     </Book>
                                 </Select>
-                                <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
+                                {focusTarget === FOCUS_COMMUNITY_SERVICE && <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
                                     <p
                                         style={{
                                             margin: 0,
@@ -133,7 +157,7 @@ export default function CommunityServices({nodes, materials, ...props}) {
                                     >
                                         {val.title.slice(0, 20) + (val.title.length > 20 ? '...' : '')}
                                     </p>
-                                </Tooltip>
+                                </Tooltip>}
                             </>
                         )
                     })}

@@ -14,7 +14,6 @@ import LoungeArea from "./lounge area/LoungeArea";
 import LogoArea from "./logo area/LogoArea";
 import WorkingArea from "./working area/WorkingArea";
 import PictureArea from "./picture area/PictureArea";
-import TrophyArea from "./trophy area/TrophyArea";
 import GamingArea from "./gaming area/GamingArea";
 
 import useMainStore from "../store/useMainStore";
@@ -63,9 +62,9 @@ export default function Lab(props) {
         controls.current.enableRotate = true
         controls.current.rotateSpeed = -.5
 
-        // animate back camera to original position 
-        gsap.to(camera.position, {duration: 1, x: 0, y: 2, z: .01})
-        gsap.to(controls.current.target, {duration: 1, x: 0, y: 2, z: 0})
+        // animate camera to focus target
+        gsap.to(controls.current.target, {duration: 1, ease: 'power4.inOut', x: controlsTarget[0], y: controlsTarget[1], z: controlsTarget[2]})
+        gsap.to(camera.position, {duration: 1, ease: 'power4.inOut', x: cameraPosition[0], y: cameraPosition[1], z: cameraPosition[2]})
       }
     }
 
@@ -80,7 +79,6 @@ export default function Lab(props) {
       <LogoArea nodes={nodes} materials={materials} />
       <WorkingArea nodes={nodes} materials={materials} />
       <PictureArea nodes={nodes} materials={materials} />
-      <TrophyArea nodes={nodes} materials={materials} />
       <GamingArea nodes={nodes} materials={materials} />
     </group>
   );

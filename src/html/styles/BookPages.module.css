@@ -2,7 +2,7 @@
     width: 600px;
     height: 800px;
     transition: opacity .3s;
-    opacity: 0
+    /* opacity: 0 */
 }
 
 .container {

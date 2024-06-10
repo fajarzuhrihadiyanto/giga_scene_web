@@ -1,17 +1,28 @@
 import React from "react"
 import useMainStore from "../store/useMainStore"
-import { FOCUS_ACHIEVEMENTS, FOCUS_BOOKS, FOCUS_COMMUNITY_SERVICE, FOCUS_FACILITIES, FOCUS_GENERAL_INFORMATION, FOCUS_OMNIDIRECTIONAL_THREADMILL, FOCUS_RESEARCH, FOCUS_SUBJECT, FOCUS_VIRTUAL_REALITY } from "../constants"
+import { FOCUS_BOOKS, FOCUS_COMMUNITY_SERVICE, FOCUS_FACILITIES, FOCUS_GENERAL_INFORMATION, FOCUS_OMNIDIRECTIONAL_THREADMILL, FOCUS_RESEARCH, FOCUS_SUBJECT, FOCUS_VIRTUAL_REALITY } from "../constants"
 
 const BackButton = () => {
     const focusTarget = useMainStore.useFocusTarget()
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
-    
+
     const back = () => {
+        let cameraPosition = [0,2,0], controlsTargetOffset = [0,0,-.01]
+        
+        if ([FOCUS_OMNIDIRECTIONAL_THREADMILL, FOCUS_VIRTUAL_REALITY].includes(focusTarget)) {
+            controlsTargetOffset = [0,0,.01]
+        }
+
+        if ([FOCUS_FACILITIES].includes(focusTarget)) {
+            controlsTargetOffset = [-.01,0,0]
+        }
+
+        console.log(controlsTargetOffset)
         setFocusTarget(null)
-        setCameraPosition([0,2,0])
-        setControlsTargetOffset([0,2,-.01])
+        setCameraPosition(cameraPosition)
+        setControlsTargetOffset(controlsTargetOffset)
     }
     
     const ref = React.useRef()
@@ -23,7 +34,6 @@ const BackButton = () => {
         FOCUS_BOOKS,
         FOCUS_GENERAL_INFORMATION,
         FOCUS_FACILITIES,
-        FOCUS_ACHIEVEMENTS,
         FOCUS_VIRTUAL_REALITY,
         FOCUS_OMNIDIRECTIONAL_THREADMILL
     ].includes(focusTarget)

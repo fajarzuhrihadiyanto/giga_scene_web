@@ -2,13 +2,20 @@ import React from "react"
 import { useLoader } from "@react-three/fiber"
 import { TextureLoader } from "three"
 
-import { addVector3 } from "../../utils"
+import { addVector3, useResponsiveScreen } from "../../utils"
 import PictureDescription from "../../html/PictureDescription"
 
 const Picture = ({nodes, materials, val, nextPic, prevPic, backFn, index, shown, ...props}) => {
 
     // load the picture texture
     const colorMap = useLoader(TextureLoader, val.pictureUrl)
+    
+    // responsive screen
+    const { isMobile } = useResponsiveScreen()
+    let position = [.1,0,-.7]
+    if (isMobile) {
+        position = [.1,-.6,0]
+    }
 
     return (
         <>
@@ -33,7 +40,7 @@ const Picture = ({nodes, materials, val, nextPic, prevPic, backFn, index, shown,
             </group>
             {shown &&
             <PictureDescription
-                position={addVector3(props.position, [.1,0,-.7])}
+                position={addVector3(props.position, position)}
                 val={val}
                 shown={shown}
                 nextPic={nextPic}

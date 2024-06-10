@@ -9,6 +9,7 @@ import useMainStore from "../../store/useMainStore";
 import { FOCUS_BOOK_DETAIL, FOCUS_RESEARCH } from "../../constants";
 import { RESEARCH } from "../../data/research";
 import { ResearchPagesLeft } from "../../html/ResearchPages";
+import { useResponsiveScreen } from "../../utils";
 
 const Research = ({nodes, materials, ...props}) => {
 
@@ -17,6 +18,7 @@ const Research = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
     const [isHovered, setIsHovered] = React.useState(false)
@@ -39,12 +41,18 @@ const Research = ({nodes, materials, ...props}) => {
 
     // research area click function
     const onClick = React.useCallback(() => {
+        let cameraPosition = [-.95, 1.12, -3.25], controlsTargetOffset = [0,0,-.01]
+        if (isMobile) {
+            cameraPosition = [-1, 1.12, -1.5]
+            controlsTargetOffset = [0,0,-.01]
+        }
+
         // only rise click event while on main view
         if (focusTarget === null) {
             setIsHovered(false)
             setFocusTarget(FOCUS_RESEARCH)
-            setCameraPosition([-.95, 1.22, -3.25])
-            setControlsTargetOffset([0,0,-.01])
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
         }
     }, [focusTarget])
 
@@ -78,6 +86,13 @@ const Research = ({nodes, materials, ...props}) => {
             e.stopPropagation()
             setFocusTarget(FOCUS_BOOK_DETAIL)
 
+            if (isMobile) {
+                const cameraPosition = [-.97, 1.22, -2.75], controlsTargetOffset = [0,0,-.01]
+                
+                setCameraPosition(cameraPosition)
+                setControlsTargetOffset(controlsTargetOffset)
+            }
+
             // reset hovered book id
             setHoveredBookId(-1)
 
@@ -88,6 +103,14 @@ const Research = ({nodes, materials, ...props}) => {
 
     const back = React.useCallback(() => {
         setFocusTarget(FOCUS_RESEARCH)
+
+        if (isMobile) {
+            const cameraPosition = [-1, 1.22, -1.5], controlsTargetOffset = [0,0,-.01]
+            
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
+        }
+
         setClickedBookId(-1)
     }, [])
     // =====| SINGLE BOOK AREA |=====
@@ -120,11 +143,11 @@ const Research = ({nodes, materials, ...props}) => {
                                         shown={shown}
                                     >
                                         <>
-                                            <ResearchPagesLeft type={val.type} title={val.title} researcher={val.researcher} year={val.year} shown={shown} backFn={back}/>
+                                            {<ResearchPagesLeft type={val.type} title={val.title} researcher={val.researcher} year={val.year} shown={shown} backFn={back}/>}
                                         </>
                                     </Book>
                                 </Select>
-                                <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
+                                {focusTarget === FOCUS_RESEARCH && <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
                                     <p
                                         style={{
                                             margin: 0,
@@ -134,7 +157,7 @@ const Research = ({nodes, materials, ...props}) => {
                                     >
                                         {val.title.slice(0, 20) + (val.title.length > 20 ? '...' : '')}
                                     </p>
-                                </Tooltip>
+                                </Tooltip>}
                             </>
                         )
                     })}

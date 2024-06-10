@@ -9,6 +9,7 @@ import Tv from "./Tv";
 import Tooltip from "../../components/Tootlip";
 import useMainStore from "../../store/useMainStore";
 import { FOCUS_GENERAL_INFORMATION } from "../../constants";
+import { useResponsiveScreen } from "../../utils";
 
 const LoungeArea = ({nodes, materials, ...props}) => {
     
@@ -17,6 +18,7 @@ const LoungeArea = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
     const [isHovered, setIsHovered] = React.useState(false)
@@ -39,11 +41,16 @@ const LoungeArea = ({nodes, materials, ...props}) => {
 
     // lounge area click function
     const onClick = React.useCallback(() => {
+        let cameraPosition = [1.85, 1.85, -3.75], controlsTargetOffset = [0,.01,-.04]
+        if (isMobile) {
+            cameraPosition = [1.85, 1.5, -2.5]
+            controlsTargetOffset = [0,.01,-.04]
+        }
         if (focusTarget === null) {
             setIsHovered(false)
             setFocusTarget(FOCUS_GENERAL_INFORMATION)
-            setCameraPosition([1.85, 1.85, -3.75])
-            setControlsTargetOffset([0,.01,-.04])
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
         }
     }, [focusTarget])
 

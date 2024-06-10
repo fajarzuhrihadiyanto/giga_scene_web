@@ -9,6 +9,7 @@ import { FOCUS_BOOKS, FOCUS_BOOK_DETAIL } from "../../constants";
 import useMainStore from "../../store/useMainStore";
 import { BOOKS } from "../../data/books";
 import { BookPagesLeft } from "../../html/BookPages";
+import { useResponsiveScreen } from "../../utils";
 
 export default function Books({nodes, materials, ...props}) {
 
@@ -17,6 +18,7 @@ export default function Books({nodes, materials, ...props}) {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
     const [isHovered, setIsHovered] = React.useState(false)
@@ -39,12 +41,18 @@ export default function Books({nodes, materials, ...props}) {
 
     // book area click function
     const onClick = React.useCallback(() => {
+        let cameraPosition = [-.95, .25, -3.25], controlsTargetOffset = [0,0,-.01]
+        if (isMobile) {
+            cameraPosition = [-1, .25, -1.5]
+            controlsTargetOffset = [0,0,-.01]
+        }
+
         // only rise click event while on main view
         if (focusTarget === null) {
             setIsHovered(false)
             setFocusTarget(FOCUS_BOOKS)
-            setCameraPosition([-.95, .25, -3.25])
-            setControlsTargetOffset([0,0,-.01])
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
         }
     }, [focusTarget])
 
@@ -78,6 +86,13 @@ export default function Books({nodes, materials, ...props}) {
             e.stopPropagation()
             setFocusTarget(FOCUS_BOOK_DETAIL)
 
+            if (isMobile) {
+                const cameraPosition = [-.97, .25, -2.75], controlsTargetOffset = [0,0,-.01]
+                
+                setCameraPosition(cameraPosition)
+                setControlsTargetOffset(controlsTargetOffset)
+            }
+
             // reset hovered book id
             setHoveredBookId(-1)
 
@@ -89,6 +104,13 @@ export default function Books({nodes, materials, ...props}) {
     const back = React.useCallback(() => {
         // set focus back to books
         setFocusTarget(FOCUS_BOOKS)
+
+        if (isMobile) {
+            const cameraPosition = [-1, .25, -1.5], controlsTargetOffset = [0,0,-.01]
+            
+            setCameraPosition(cameraPosition)
+            setControlsTargetOffset(controlsTargetOffset)
+        }
         
         // reset clicked book id
         setClickedBookId(-1)
@@ -122,11 +144,11 @@ export default function Books({nodes, materials, ...props}) {
                                         shown={shown}
                                     >
                                         <>
-                                            <BookPagesLeft shown={shown} isbn={val.isbn} year={val.year} title={val.title} author={val.author} city={val.city} backFn={back} />
+                                            {shown && <BookPagesLeft shown={shown} isbn={val.isbn} year={val.year} title={val.title} author={val.author} city={val.city} backFn={back} />}
                                         </>
                                     </Book>
                                 </Select>
-                                <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
+                                {focusTarget === FOCUS_BOOKS && <Tooltip position={[index * .06 + 0,.175,.01]} htmlProps={{scale: hovered ? [.1,.1,.1] : [0,0,0]}} scale={Number(hovered)} opacity={Number(hovered)}>
                                     <p
                                         style={{
                                             margin: 0,
@@ -136,7 +158,7 @@ export default function Books({nodes, materials, ...props}) {
                                     >
                                         {val.title.slice(0, 20) + (val.title.length > 20 ? '...' : '')}
                                     </p>
-                                </Tooltip>
+                                </Tooltip>}
                             </>
                         )
                     })}
