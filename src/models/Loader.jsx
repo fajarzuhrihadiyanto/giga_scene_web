@@ -1,8 +1,11 @@
 import React from "react"
 import gsap from "gsap"
 import { Text } from "@react-three/drei"
+import { useResponsiveScreen } from "../utils"
 
 const Loader = () => {
+    const { isMobile } = useResponsiveScreen()
+    const fontSize = isMobile ? .1 : .25
 
     const ref = React.useRef()
 
@@ -20,7 +23,7 @@ const Loader = () => {
                 <boxGeometry args={[.5, .5, .5]} />
                 <meshStandardMaterial color="lightblue" />
             </mesh>
-            <Text color={'black'} position={[0, 0, .5]} rotation={[-Math.PI/2,0,0]} fontSize={.25}>
+            <Text color={'black'} position={[0, 0, .5]} rotation={[-Math.PI/2,0,0]} fontSize={fontSize}>
                 Loading the models...
             </Text>
         </>
