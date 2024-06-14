@@ -40,16 +40,16 @@ const PictureDescription = ({ val, shown, backFn, nextPic, prevPic, ...props }) 
                     padding: '32px',
                     fontSize: '24pt'
                 }}>
-                    <h1 style={{margin: 0, fontSize: '1.5em'}}>{val.name}</h1>
-                    {val.isHeadLab && <p style={{marginTop: 0}}>Kepala Laboratorium</p>}
-                    <p style={{margin: 0}}>NIDN : {val.nidn}</p>
+                    <h1 style={{margin: 0, fontSize: '1.5em'}}>{val.fullname}</h1>
+                    {val.is_head_lab && <p style={{marginTop: 0}}>Kepala Laboratorium</p>}
+                    <p style={{margin: 0}}>NIDN : {val.NIDN}</p>
                     <p style={{margin: 0}}>Email : {val.email}</p>
-                    <p style={{margin: 0}}>Pendidikan Terakhir : {val.last_education}</p>
+                    <p style={{margin: 0}}>Pendidikan Terakhir : {val.latest_education}</p>
                     <p style={{marginBottom: 0}}>Jabatan Terakhir </p>
                     <ul>
-                        {val.last_position.length > 0 ?
-                            val.last_position.map((position, index) => (
-                                <li key={index}>{position}</li>
+                        {val.position.length > 0 ?
+                            val.position.map((position, index) => (
+                                <li key={index}>{position.name} {position.from_year && `${position.from_year} - ${position.to_year || 'Sekarang'}`}</li>
                             ))
                             : '-'
                         }
@@ -65,13 +65,13 @@ const PictureDescription = ({ val, shown, backFn, nextPic, prevPic, ...props }) 
                         <tbody>
                             <tr>
                                 <td align="center" style={{padding: 16}}>
-                                    <a href={`https://www.scopus.com/authid/detail.uri?authorId=${val.scopusId}`} target="_blank" rel='noreferrer'>Scopus</a>
+                                    <a href={`https://www.scopus.com/authid/detail.uri?authorId=${val.publication.scopus_id}`} target="_blank" rel='noreferrer'>Scopus</a>
                                 </td>
                                 <td align="center" style={{padding: 16}}>
-                                    <a href={`https://scholar.google.co.id/citations?user=${val.scholarId}&hl=id`} target="_blank" rel='noreferrer'>Google Scholar</a>
+                                    <a href={`https://scholar.google.co.id/citations?user=${val.publication.google_scholar_id}&hl=id`} target="_blank" rel='noreferrer'>Google Scholar</a>
                                 </td>
                                 <td align="center" style={{padding: 16}}>
-                                    <a href={`https://sinta.kemdikbud.go.id/authors/profile/${val.sintaId}`} target="_blank" rel='noreferrer'>Sinta</a>
+                                    <a href={`https://sinta.kemdikbud.go.id/authors/profile/${val.publication.sinta_id}`} target="_blank" rel='noreferrer'>Sinta</a>
                                 </td>
                             </tr>
                         </tbody>

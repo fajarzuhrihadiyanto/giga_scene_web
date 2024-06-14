@@ -6,8 +6,8 @@ import Picture from "./Picture";
 import useMainStore from "../../store/useMainStore";
 import { addVector3, useResponsiveScreen } from "../../utils";
 import { FOCUS_LECTURER } from "../../constants";
-import { LECTURERS } from "../../data/lecturers";
 import Tooltip from "../../components/Tootlip";
+import useDataStore from "../../store/dataStore";
 
 const PictureArea = ({nodes, materials, ...props}) => {
 
@@ -16,6 +16,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const professors = useDataStore.useProfessors()
     const { isMobile } = useResponsiveScreen()
 
     const [hoveredPictureId, setHoveredPictureId] = React.useState(-1)
@@ -44,7 +45,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
     }, [focusTarget])
 
     // count total picture
-    const totalPicture = LECTURERS.length
+    const totalPicture = professors.length
 
     // define how many picture per row
     const picturePerRow = 4
@@ -59,7 +60,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
 
     return (
         <group {...props}>
-            {LECTURERS.map((val, index) => {
+            {professors.map((val, index) => {
                 // get each picture position
                 const row = Math.floor(index / picturePerRow)
                 const col = index % picturePerRow
@@ -149,7 +150,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
                                 fontSize: '4pt',
                                 margin: 0,
                                 textAlign: 'center'
-                            }}>{val.name}</p>
+                            }}>{val.fullname}</p>
                         </Tooltip>
                     </Select>
                 )

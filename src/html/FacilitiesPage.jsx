@@ -1,8 +1,10 @@
 import { Html } from "@react-three/drei"
 
 import styles from './styles/Facility.module.css'
+import useDataStore from "../store/dataStore"
 
 const FacilitiesPage = () => {
+    const facilities = useDataStore.useFacilities()
     return (
         <Html
             transform occlude
@@ -14,11 +16,7 @@ const FacilitiesPage = () => {
             <div className={styles.container}>
                 <h1 className={styles.title}>Fasilitas</h1>
                 <ul className={styles.list}>
-                    <li>PC Client (Intel Core i7 Gen 12, Ram 32GB, SSD 1TB, Monitor 24″ Curved)</li>
-                    <li>Oculus Rift Set (Game controller)</li>
-                    <li>Oculus VR Development KIT DK-2-V51-BDL (Game controller)</li>
-                    <li>HTC VIVE Virtual Reality (Game controller)</li>
-                    <li>PC High End (Intel Core i9-12900K, 64GB DDR5, RTX 3080Ti 12GB)</li>
+                    {facilities.map((facility, index) => <li key={index}>{facility.name}</li>)}
                 </ul>
             </div>
         </Html>

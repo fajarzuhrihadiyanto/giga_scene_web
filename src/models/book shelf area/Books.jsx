@@ -7,9 +7,9 @@ import Book from "./Book";
 import Tooltip from "../../components/Tootlip";
 import { FOCUS_BOOKS, FOCUS_BOOK_DETAIL } from "../../constants";
 import useMainStore from "../../store/useMainStore";
-import { BOOKS } from "../../data/books";
 import { BookPagesLeft } from "../../html/BookPages";
 import { useResponsiveScreen } from "../../utils";
+import useDataStore from "../../store/dataStore";
 
 export default function Books({nodes, materials, ...props}) {
 
@@ -18,6 +18,7 @@ export default function Books({nodes, materials, ...props}) {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const books = useDataStore.useBooks()
     const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
@@ -123,7 +124,7 @@ export default function Books({nodes, materials, ...props}) {
         <>
             <Select enabled={isHovered && ![FOCUS_BOOKS, FOCUS_BOOK_DETAIL].includes(focusTarget)}>
                 <group position={[-1.7, .25, -3.94]} {...props} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onClick={onClick}>
-                    {BOOKS.map((val, index) => {
+                    {books.map((val, index) => {
                         // status hovered if the book is hovered and the focus target is on subject and no book is clicked
                         const hovered = hoveredBookId === index && focusTarget === FOCUS_BOOKS && clickedBookId === -1
 
@@ -144,7 +145,7 @@ export default function Books({nodes, materials, ...props}) {
                                         shown={shown}
                                     >
                                         <>
-                                            {shown && <BookPagesLeft shown={shown} isbn={val.isbn} year={val.year} title={val.title} author={val.author} city={val.city} backFn={back} />}
+                                            {shown && <BookPagesLeft shown={shown} isbn={val.ISBN} year={val.release_year} title={val.title} author={val.professor_fullname} city={val.release_city} backFn={back} />}
                                         </>
                                     </Book>
                                 </Select>

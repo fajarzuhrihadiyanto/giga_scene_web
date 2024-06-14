@@ -8,7 +8,7 @@ import PictureDescription from "../../html/PictureDescription"
 const Picture = ({nodes, materials, val, nextPic, prevPic, backFn, index, shown, ...props}) => {
 
     // load the picture texture
-    const colorMap = useLoader(TextureLoader, val.pictureUrl)
+    const colorMap = useLoader(TextureLoader, val.photo_url)
     
     // responsive screen
     const { isMobile } = useResponsiveScreen()

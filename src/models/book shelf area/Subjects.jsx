@@ -7,9 +7,9 @@ import Book from "./Book";
 import Tooltip from "../../components/Tootlip";
 import useMainStore from "../../store/useMainStore";
 import { FOCUS_BOOK_DETAIL, FOCUS_SUBJECT } from "../../constants";
-import { SUBJECT } from "../../data/subject";
 import { SubjectPagesLeft, SubjectPagesRight } from "../../html/SubjectPages";
 import { useResponsiveScreen } from "../../utils";
+import useDataStore from "../../store/dataStore";
 
 const Subjects = ({nodes, materials, ...props}) => {
     
@@ -18,6 +18,7 @@ const Subjects = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const subjects = useDataStore.useSubjects()
     const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
@@ -124,7 +125,7 @@ const Subjects = ({nodes, materials, ...props}) => {
         <>
             <Select enabled={isHovered && ![FOCUS_SUBJECT, FOCUS_BOOK_DETAIL].includes(focusTarget)}>
                 <group position={[-1.716, 1.72, -3.94]} {...props} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onClick={onClick}>
-                    {SUBJECT.map((val, index) => {
+                    {subjects.map((val, index) => {
 
                         // status hovered if the book is hovered and the focus target is on subject and no book is clicked
                         const hovered = hoveredBookId === index && focusTarget === FOCUS_SUBJECT && clickedBookId === -1
@@ -148,7 +149,7 @@ const Subjects = ({nodes, materials, ...props}) => {
                             >
                                 {shown && (
                                     <>
-                                        <SubjectPagesLeft title={val.title} description={val.description} mandatory={val.mandatory}/>
+                                        <SubjectPagesLeft title={val.name} description={val.description} mandatory={val.is_compulsory}/>
                                         <SubjectPagesRight objective={val.objective} backFn={back} />
                                     </>
                                 )}
@@ -162,7 +163,7 @@ const Subjects = ({nodes, materials, ...props}) => {
                                     textAlign: 'center'
                                 }}
                             >
-                                {val.title}
+                                {val.name}
                             </p>
                         </Tooltip>}
                         </>

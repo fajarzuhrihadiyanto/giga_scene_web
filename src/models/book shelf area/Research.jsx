@@ -7,9 +7,9 @@ import Book from "./Book";
 import Tooltip from "../../components/Tootlip";
 import useMainStore from "../../store/useMainStore";
 import { FOCUS_BOOK_DETAIL, FOCUS_RESEARCH } from "../../constants";
-import { RESEARCH } from "../../data/research";
 import { ResearchPagesLeft } from "../../html/ResearchPages";
 import { useResponsiveScreen } from "../../utils";
+import useDataStore from "../../store/dataStore";
 
 const Research = ({nodes, materials, ...props}) => {
 
@@ -18,6 +18,7 @@ const Research = ({nodes, materials, ...props}) => {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const research = useDataStore.useResearch()
     const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
@@ -122,7 +123,7 @@ const Research = ({nodes, materials, ...props}) => {
         <>
             <Select enabled={isHovered && ![FOCUS_RESEARCH, FOCUS_BOOK_DETAIL].includes(focusTarget)}>
                 <group position={[-1.716, 1.22, -3.94]} {...props} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onClick={onClick}>
-                    {RESEARCH.map((val, index) => {
+                    {research.map((val, index) => {
                         // status hovered if the book is hovered and the focus target is on subject and no book is clicked
                         const hovered = hoveredBookId === index && focusTarget === FOCUS_RESEARCH && clickedBookId === -1
 
@@ -143,7 +144,7 @@ const Research = ({nodes, materials, ...props}) => {
                                         shown={shown}
                                     >
                                         <>
-                                            {<ResearchPagesLeft type={val.type} title={val.title} researcher={val.researcher} year={val.year} shown={shown} backFn={back}/>}
+                                            {<ResearchPagesLeft type={val.research_type} title={val.title} researcher={val.professor_fullname} year={val.year} shown={shown} backFn={back}/>}
                                         </>
                                     </Book>
                                 </Select>

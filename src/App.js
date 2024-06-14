@@ -6,6 +6,7 @@ import BackButton from './components/BackButton'
 import ControlContainer from './context/ControlsContext'
 import Lab from './models/Lab'
 import Loader from './models/Loader'
+import DataDownloader from './components/DataDownloader'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <ambientLight intensity={5} />
 
           <ControlContainer target={controlsTarget}>
+            <DataDownloader />
             <Selection>
               <Lab />
               <EffectComposer autoClear={false}>

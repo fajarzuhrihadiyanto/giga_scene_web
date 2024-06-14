@@ -7,9 +7,9 @@ import Book from "./Book";
 import Tooltip from "../../components/Tootlip";
 import { FOCUS_BOOK_DETAIL, FOCUS_COMMUNITY_SERVICE } from "../../constants";
 import useMainStore from "../../store/useMainStore";
-import { COMMUNITY_SERVICE } from "../../data/communityService";
 import { CommunityServicePagesLeft } from "../../html/CommunityServicePages";
 import { useResponsiveScreen } from "../../utils";
+import useDataStore from "../../store/dataStore";
 
 export default function CommunityServices({nodes, materials, ...props}) {
 
@@ -18,6 +18,7 @@ export default function CommunityServices({nodes, materials, ...props}) {
     const setFocusTarget = useMainStore.useSetFocusTarget()
     const setCameraPosition = useMainStore.useSetCameraPosition()
     const setControlsTargetOffset = useMainStore.useSetControlsTargetOffset()
+    const communityServices = useDataStore.useCommunityServices()
     const { isMobile } = useResponsiveScreen()
 
     // state wether the area is hovered or not
@@ -121,7 +122,7 @@ export default function CommunityServices({nodes, materials, ...props}) {
         <>
             <Select enabled={isHovered && ![FOCUS_COMMUNITY_SERVICE, FOCUS_BOOK_DETAIL].includes(focusTarget)}>
                 <group position={[-1.716, 0.72, -3.94]} {...props} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onClick={onClick}>
-                {COMMUNITY_SERVICE.map((val, index) => {
+                {communityServices.map((val, index) => {
                         // status hovered if the book is hovered and the focus target is on subject and no book is clicked
                         const hovered = hoveredBookId === index && focusTarget === FOCUS_COMMUNITY_SERVICE && clickedBookId === -1
 
@@ -143,7 +144,7 @@ export default function CommunityServices({nodes, materials, ...props}) {
                                         shown={shown}
                                     >
                                         <>
-                                            {shown && <CommunityServicePagesLeft type={val.type} title={val.title} researcher={val.researcher} year={val.year} backFn={back}/>}
+                                            {shown && <CommunityServicePagesLeft type={val.community_service_type} title={val.title} researcher={val.professor_fullname} year={val.year} backFn={back}/>}
                                         </>
                                     </Book>
                                 </Select>
