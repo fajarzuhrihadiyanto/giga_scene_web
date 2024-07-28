@@ -71,7 +71,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
                     // dont set clicked picture if the focus target is already at the picture
                     if (focusTarget === FOCUS_LECTURER) return
 
-                    let cameraPositionOffset = [0.5, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
+                    let cameraPositionOffset = [0.6, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
                     if (isMobile) {
                         cameraPositionOffset = [1.1, -.4, 0]
                     }
@@ -101,7 +101,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
             
                 // go to next picture
                 const nextPic = () => {
-                    let cameraPositionOffset = [0.5, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
+                    let cameraPositionOffset = [0.6, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
                     if (isMobile) {
                         cameraPositionOffset = [1.1, -.4, 0]
                     }
@@ -112,7 +112,7 @@ const PictureArea = ({nodes, materials, ...props}) => {
             
                 // go to previous picture
                 const prevPic = () => {
-                    let cameraPositionOffset = [0.5, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
+                    let cameraPositionOffset = [0.6, 0, -0.5], controlsTargetOffset = [-.01, 0, 0]
                     if (isMobile) {
                         cameraPositionOffset = [1.1, -.4, 0]
                     }
